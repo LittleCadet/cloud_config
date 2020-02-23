@@ -1,0 +1,43 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: cloud-config-server
+  cloud:
+    config:
+      server:
+        git:
+          #仓库地址
+          uri: https://github.com/LittleCadet/cloud_config_properties.git
+          #默认分支
+          default-label: master
+          #仓库文件夹目录，如果是/**，就是所有目录所有文件
+          search-paths: /**
+          #拉取配置文件的存储位置
+          basedir: target/config
+          #启动加载配置文件：【默认：使用才加载】
+          clone-on-start: true
+
+        #config server 自带健康指示器
+        health:
+          repositories:
+            #configServer通过git获取的库名
+            cloud_config_properties:
+              #application的名字
+              name: cloud-service
+              #分支名 【默认master】
+              label: master
+              #profile的名字 【默认default】
+              profiles: default
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin123@127.0.0.1:8761/eureka/
+
+management:
+  endpoint:
+    health:
+      #默认是never
+      show-details: always
